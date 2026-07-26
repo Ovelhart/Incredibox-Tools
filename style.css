@@ -1,0 +1,108 @@
+:root {
+    --color-1: #D8A365;
+}
+body, html {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(21, 21, 21);
+    height: 100%;
+    width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+#row {
+    display: flex;
+    width: 80%;
+    max-width: 40rem;
+    height: 15rem;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+.app-tool {
+    height: calc(6rem + 2rem);
+    width: 6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin: 0 1rem;
+}
+.app-tool:hover {
+    scale: 1.05;
+    transition: all 0.15s;
+}
+.app-tool .appimg {
+    background-color: black;
+    width: 100%;
+    border-radius: 1.5rem;
+    user-select: none;
+}
+.app-tool .appname {
+    height: 2rem;
+    width: 100%;
+    font-size: 1.3rem;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    font-family: "Allan", serif;
+    user-select: none;
+    font-weight: 500;
+    margin-top: 0.3rem;
+}
+#fade{
+    position: fixed;
+    inset: 0;
+    background: black;
+    z-index: 9999;
+    opacity: 1;
+    pointer-events: none;
+    transition: opacity 1s ease;
+}
+
+#fade.fade-out{
+    opacity: 0;
+}
+.allan-regular {
+    font-family: "Allan", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.allan-bold {
+    font-family: "Allan", serif;
+    font-weight: 700;
+    font-style: normal;
+}
+#credit-game {
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    bottom: 0.5rem;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    z-index: 1;
+    color: white;
+    user-select: none;
+}
+.color-1 {
+    margin-left: 0.3rem;
+    color: var(--color-1);
+}
+#colors {
+    color: #ba7b3d;
+}

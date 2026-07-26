@@ -1,0 +1,42 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Allan:wght@400;700&display=swap" rel="stylesheet">
+    <title>Incredimods tools</title>
+</head>
+
+<body>
+    <div id="fade"></div>
+    <div id="row">
+        <div onclick="ferramenta('colors')" class="app-tool">
+            <img src="img/icon.jpg" alt="1" class="appimg">
+            <span id="colors" class="appname">Colors</span>
+        </div>
+    </div>
+    <span id="credit-game">
+        Incredibox by <span class="color-1">So Far So Good</span>
+    </span>
+    <script>
+        function ferramenta(nome) {
+            window.location.href = "tools/" + nome + ".html";
+        }
+        window.addEventListener("load", () => {
+
+            const fade = document.getElementById("fade");
+
+            fade.classList.add("fade-out");
+
+            fade.addEventListener("transitionend", () => {
+                fade.remove();
+            });
+
+        });
+    </script>
+</body>
+
+</html>
