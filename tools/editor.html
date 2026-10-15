@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Allan:wght@400;700&display=swap" rel="stylesheet">
+    <link href="quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Editor</title>
+</head>
+
+<body>
+    <div onclick="voltar()" id="trocar-btn">
+        <svg xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 640 640"><!--!Font Awesome Free v7.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+            <path
+                d="M566.6 214.6L470.6 310.6C461.4 319.8 447.7 322.5 435.7 317.5C423.7 312.5 416 300.9 416 288L416 224L96 224C78.3 224 64 209.7 64 192C64 174.3 78.3 160 96 160L416 160L416 96C416 83.1 423.8 71.4 435.8 66.4C447.8 61.4 461.5 64.2 470.7 73.3L566.7 169.3C579.2 181.8 579.2 202.1 566.7 214.6zM169.3 566.6L73.3 470.6C60.8 458.1 60.8 437.8 73.3 425.3L169.3 329.3C178.5 320.1 192.2 317.4 204.2 322.4C216.2 327.4 224 339.1 224 352L224 416L544 416C561.7 416 576 430.3 576 448C576 465.7 561.7 480 544 480L224 480L224 544C224 556.9 216.2 568.6 204.2 573.6C192.2 578.6 178.5 575.8 169.3 566.7z" />
+        </svg>
+    </div>
+    <div id="fade"></div>
+    <input type="file" id="arquivoHTML" accept=".html,.htm" style="display: none;">
+
+    <div id="menu-export" style="display: none;">
+        <div id="buttons">
+            <button onclick="abrirMenu()" id="buttons-back">back</button>
+            <button onclick="exportarHTML()">export html</button>
+            <button onclick="exportarXML()">export xml</button>
+        </div>
+    </div>
+    <div id="menu-config" style="display: none;">
+        <div id="buttons-config">
+            <button onclick="abrirConfig()" id="buttons-back">back</button>
+            <button id="darkmodetoggle" onclick="mudarParaDark()"></button>
+            <div id="config-palette"></div>
+            <textarea id="paleta-import-texto" placeholder='Paste here, ex: "colors": ["#d8a365", ...]'></textarea>
+            <button onclick="importarPaletaDeTexto()">import palette</button>
+        </div>
+    </div>
+
+    <div id="editor">
+        <p>
+            <span class="ql-size-huge ql-font-allan">Credits</span>
+        </p>
+        <p>
+            <img src="template.png">
+        </p>
+        <p><br></p>
+        <p>
+            Designers by
+            <a href="https://www.youtube.com/watch?v=QDia3e12czc" rel="noopener noreferrer" target="_blank">
+                Name
+            </a>
+        </p>
+
+        <p>...</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+
+    <script>
+        window.addEventListener('load', () => {
+            const fade = document.getElementById('fade');
+
+            requestAnimationFrame(() => {
+                fade.classList.add('hide');
+            });
+
+            setTimeout(() => {
+                fade.style.display = 'none';
+            }, 2000);
+        });
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark');
+        }
+        const Font = Quill.import('attributors/class/font');
+
+        Font.whitelist = [
+            false,
+            'sans-serif',
+            'serif',
+            'monospace',
+            'allan'
+        ];
+
+        Quill.register(Font, true);
+
+        const toolbarOptions = [
+            [
+                { font: Font.whitelist },
+                { size: ['small', false, 'large', 'huge'] }
+            ],
+            [
+                'bold',
+                'italic',
+                'underline',
+                'strike'
+            ],
+            [
+                { color: [] },
+                { background: [] }
+            ],
+            [
+                { script: 'super' },
+                { script: 'sub' }
+            ],
+            [
+                { header: 1 },
+                { header: 2 }
+            ],
+            [
+                'blockquote',
+                'code-block'
+            ],
+            [
+                { list: 'ordered' },
+                { list: 'bullet' }
+            ],
+            [
+                { indent: '-1' },
+                { indent: '+1' }
+            ],
+            [
+                { direction: 'rtl' },
+                { align: [] }
+            ],
+            [
+                'link',
+                'image',
+                'video',
+                'formula'
+            ],
+            [
+                'clean'
+            ],
+            [
+                'export',
+                'import',
+                'config'
+            ]
+        ];
+
+        function abrirMenu() {
+            document
+                .getElementById('menu-export')
+                .classList.toggle('show');
+        }
+        function abrirConfig() {
+            document
+                .getElementById('menu-config')
+                .classList.toggle('show');
+        }
+        function exportarHTML() {
+            const conteudoDoEditor =
+                document.querySelector('.ql-editor').innerHTML;
+
+            const blob = new Blob(
+                [conteudoDoEditor],
+                {
+                    type: 'text/html;charset=utf-8'
+                }
+            );
+
+            const link = document.createElement('a');
+
+            link.href = URL.createObjectURL(blob);
+            link.download = 'credit.html';
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            link.remove();
+
+            URL.revokeObjectURL(link.href);
+        }
+
+        function escapeXmlAttribute(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function escapeCommandText(value) {
+            return String(value)
+                .replace(/\\/g, '\\\\')
+                .replace(/\//g, '\\/')
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function formatText(text, attributes = {}) {
+
+            if (!text) {
+                return '';
+            }
+
+            let result = escapeCommandText(text);
+
+            if (attributes.bold === true) {
+                result = `(!bold/${result})`;
+            }
+
+            if (attributes.underline === true) {
+                result = `(!underline/${result})`;
+            }
+
+            if (attributes.italic === true) {
+                result = `(!italic/${result})`;
+            }
+
+            if (
+                typeof attributes.color === 'string' &&
+                /^#[0-9a-fA-F]{6}$/.test(attributes.color)
+            ) {
+                result =
+                    `(!color/${attributes.color}/${result})`;
+            }
+
+            if (
+                typeof attributes.size === 'string' &&
+                /^\d+px$/.test(attributes.size)
+            ) {
+                result =
+                    `(!size/${attributes.size}/${result})`;
+            }
+
+            return result;
+        }
+
+        function deltaToCreditsText(delta) {
+
+            let result = '';
+
+            for (const op of delta.ops) {
+
+                if (typeof op.insert === 'string') {
+
+                    const parts = op.insert.split('\n');
+
+                    for (let i = 0; i < parts.length; i++) {
+
+                        if (parts[i]) {
+                            result += formatText(
+                                parts[i],
+                                op.attributes || {}
+                            );
+                        }
+
+                        if (i < parts.length - 1) {
+                            result += '(!line)';
+                        }
+                    }
+
+                    continue;
+                }
+
+                if (
+                    typeof op.insert === 'object' &&
+                    op.insert !== null
+                ) {
+
+                    const embed = op.insert;
+
+                    if (typeof embed.image === 'string') {
+                        result +=
+                            `(!img/${escapeCommandText(embed.image)})`;
+                    }
+
+                    if (typeof embed.video === 'string') {
+                        result +=
+                            `(!youtube/${escapeCommandText(embed.video)})`;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        function createPage(delta, options = {}) {
+
+            const noImage =
+                options.noImage !== undefined
+                    ? options.noImage
+                    : true;
+
+            const image =
+                options.image || '';
+
+            const title =
+                options.title || 'Credit Page';
+
+            const text =
+                deltaToCreditsText(delta);
+
+            return (
+                `<page ` +
+                `noImage="${noImage}" ` +
+                `image="${escapeXmlAttribute(image)}" ` +
+                `title="${escapeXmlAttribute(title)}" ` +
+                `text="${text}"/>`
+            );
+        }
+
+        function createCreditsXml(pages) {
+
+            let xml =
+                '<?xml version="1.0" encoding="UTF-8"?>\n';
+
+            xml += '<credits>\n';
+
+            for (const page of pages) {
+                xml += `    ${page}\n`;
+            }
+
+            xml += '</credits>';
+
+            return xml;
+        }
+
+        function downloadXml(
+            xml,
+            filename = 'credits.xml'
+        ) {
+
+            const blob = new Blob(
+                [xml],
+                {
+                    type: 'application/xml;charset=utf-8'
+                }
+            );
+
+            const url =
+                URL.createObjectURL(blob);
+
+            const link =
+                document.createElement('a');
+
+            link.href = url;
+            link.download = filename;
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            link.remove();
+
+            URL.revokeObjectURL(url);
+        }
+
+        function exportarXML() {
+
+            const delta =
+                quill.getContents();
+
+            const page =
+                createPage(delta, {
+                    noImage: true,
+                    image: '',
+                    title: 'Credit Page'
+                });
+
+            const xml =
+                createCreditsXml([
+                    page
+                ]);
+
+            downloadXml(xml);
+        }
+
+        function importarHTML() {
+
+            const input =
+                document.getElementById('arquivoHTML');
+
+            input.value = '';
+
+            input.onchange = function () {
+
+                const arquivo =
+                    input.files[0];
+
+                if (!arquivo) {
+                    return;
+                }
+
+                const leitor =
+                    new FileReader();
+
+                leitor.onload = function (evento) {
+
+                    const htmlCompleto =
+                        evento.target.result;
+
+                    const parser =
+                        new DOMParser();
+
+                    const documento =
+                        parser.parseFromString(
+                            htmlCompleto,
+                            'text/html'
+                        );
+
+                    const conteudo =
+                        documento.body.innerHTML;
+
+                    quill.setText('');
+
+                    quill.clipboard.dangerouslyPasteHTML(
+                        0,
+                        conteudo
+                    );
+                };
+
+                leitor.readAsText(arquivo);
+            };
+
+            input.click();
+        }
+
+        const quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: {
+                    container: toolbarOptions,
+                    handlers: {
+                        export: abrirMenu,
+                        import: importarHTML,
+                        config: abrirConfig
+                    }
+                }
+            }
+        });
+        const PALETA_PADRAO = [
+            "#d8a365",
+            "#ba7b3d",
+            "#a16224",
+            "#6a3501",
+            "#422101",
+            "#201200"
+        ];
+
+        function carregarPaleta() {
+            let salva = null;
+
+            try {
+                salva = JSON.parse(localStorage.getItem('colorPalette'));
+            } catch (e) {
+                salva = null;
+            }
+
+            const paleta =
+                Array.isArray(salva) && salva.length === PALETA_PADRAO.length
+                    ? salva
+                    : PALETA_PADRAO.slice();
+
+            paleta.forEach((cor, i) => {
+                document.documentElement.style.setProperty(
+                    `--color-${i + 1}`,
+                    cor
+                );
+            });
+
+            return paleta;
+        }
+
+        function salvarPaleta(paleta) {
+            localStorage.setItem('colorPalette', JSON.stringify(paleta));
+
+            paleta.forEach((cor, i) => {
+                document.documentElement.style.setProperty(
+                    `--color-${i + 1}`,
+                    cor
+                );
+            });
+        }
+
+        let paletaAtual = carregarPaleta();
+
+        function adicionarPaletaNoPicker(picker, format) {
+            const options = picker.querySelector('.ql-picker-options');
+
+            if (!options || options.querySelector('.ql-palette-label')) {
+                return;
+            }
+
+            const label = document.createElement('span');
+            label.className = 'ql-palette-label';
+            label.textContent = 'da paleta de cores';
+            options.appendChild(label);
+
+            for (let i = 1; i <= PALETA_PADRAO.length; i++) {
+                const valor = `var(--color-${i})`;
+                const item = document.createElement('span');
+
+                item.classList.add('ql-picker-item', 'ql-palette-color');
+                item.setAttribute('data-value', valor);
+                item.style.backgroundColor = valor;
+
+                item.addEventListener('click', () => {
+                    quill.format(format, valor);
+
+                    options
+                        .querySelectorAll('.ql-picker-item.ql-selected')
+                        .forEach((el) => el.classList.remove('ql-selected'));
+
+                    item.classList.add('ql-selected');
+                    picker.classList.remove('ql-expanded');
+
+                    const rotulo =
+                        picker.querySelector('.ql-picker-label');
+
+                    if (rotulo) {
+                        rotulo.setAttribute('data-value', valor);
+                    }
+                });
+
+                options.appendChild(item);
+            }
+        }
+
+        document
+            .querySelectorAll('.ql-color')
+            .forEach((picker) => adicionarPaletaNoPicker(picker, 'color'));
+
+        document
+            .querySelectorAll('.ql-background')
+            .forEach((picker) => adicionarPaletaNoPicker(picker, 'background'));
+
+        function montarConfigPaleta() {
+            const container =
+                document.getElementById('config-palette');
+
+            container.innerHTML = '';
+
+            paletaAtual.forEach((cor, i) => {
+                const input = document.createElement('input');
+
+                input.type = 'color';
+                input.value = cor;
+                input.title = `Cor ${i + 1} da paleta`;
+
+                input.addEventListener('input', () => {
+                    paletaAtual[i] = input.value;
+                    salvarPaleta(paletaAtual);
+                });
+
+                container.appendChild(input);
+            });
+        }
+
+        montarConfigPaleta();
+
+        function importarPaletaDeTexto() {
+            const campo =
+                document.getElementById('paleta-import-texto');
+
+            const texto = campo.value;
+
+            const encontradas =
+                texto.match(/#[0-9a-fA-F]{6}\b/g);
+
+            if (!encontradas || encontradas.length === 0) {
+                alert('No color found in the pasted text.');
+                return;
+            }
+
+            const novaPaleta = [];
+
+            for (let i = 0; i < PALETA_PADRAO.length; i++) {
+                novaPaleta.push(
+                    encontradas[i] || paletaAtual[i] || PALETA_PADRAO[i]
+                );
+            }
+
+            paletaAtual = novaPaleta;
+
+            salvarPaleta(paletaAtual);
+            montarConfigPaleta();
+
+            campo.value = '';
+        }
+
+        function mudarParaDark() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem(
+                'darkMode',
+                document.body.classList.contains('dark') ? 'true' : 'false'
+            );
+        }
+        function voltar() {
+            window.location.href = "../index.html";
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,347 @@
+:root {
+    --color-1: #d8a365;
+    --color-2: #ba7b3d;
+    --color-3: #a16224;
+    --color-4: #6a3501;
+    --color-5: #422101;
+    --color-6: #201200;
+}
+
+html,
+body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    background-color: white;
+}
+
+#editor {
+    margin: 1rem;
+    margin-top: 0;
+}
+
+.ql-toolbar.ql-snow {
+    margin: 1rem;
+    margin-bottom: 0;
+}
+
+.allan-regular {
+    font-family: "Allan", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.allan-bold {
+    font-family: "Allan", serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.ql-snow .ql-toolbar .ql-export,
+.ql-toolbar.ql-snow .ql-export {
+    width: auto;
+    padding: 3px 6px;
+}
+
+.ql-export::before {
+    content: 'Export';
+    font-size: 12px;
+}
+
+.ql-import::before {
+    content: 'Import';
+    font-size: 12px;
+}
+
+.ql-font-allan {
+    font-family: "Allan", serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value=""]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value=""]::before {
+    content: "Padrão";
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="allan"]::before {
+    content: "Allan";
+    font-family: "Allan", serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="allan"]::before {
+    content: "Allan";
+    font-family: "Allan", serif;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #b4b4b4;
+}
+
+#menu-export {
+    background-color: #7a7a7ac1;
+    flex-direction: column;
+    position: fixed;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    height: 100%;
+    z-index: 100;
+}
+
+#menu-export.show {
+    display: flex !important;
+}
+
+#buttons {
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 20rem;
+    width: 20rem;
+    max-width: 50%;
+    max-height: 50%;
+    border-radius: 1rem;
+}
+.dark #buttons {
+    background-color: rgb(18, 18, 18);
+}
+#buttons button {
+    width: 80%;
+    height: 2rem;
+    margin: 0.5rem 0;
+    border-radius: 1rem;
+    border: 1.8px solid #909090;
+    outline: none;
+    user-select: none;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+.dark #buttons button {
+    border: 1.8px solid #636363;
+    background-color: rgb(18, 18, 18);
+    color: white;
+}
+
+#buttons button:hover {
+    scale: 1.1;
+    transition: all 0.1s;
+}
+#menu-config {
+    background-color: #7a7a7ac1;
+    flex-direction: column;
+    position: fixed;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    height: 100%;
+    z-index: 100;
+}
+
+#menu-config.show {
+    display: flex !important;
+}
+#buttons-config {
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    height: 20rem;
+    width: 20rem;
+    max-width: 50%;
+    max-height: 50%;
+    border-radius: 1rem;
+}
+.dark #buttons-config {
+    background-color: rgb(18, 18, 18);
+}
+
+#buttons-config button {
+    width: 80%;
+    height: 2rem;
+    margin: 0.5rem 0;
+    border-radius: 1rem;
+    border: 1.8px solid #909090;
+    outline: none;
+    user-select: none;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+.dark #buttons-config button {
+    border: 1.8px solid #636363;
+    background-color: rgb(18, 18, 18);
+    color: white;
+}
+
+#buttons-config button:hover {
+    scale: 1.1;
+    transition: all 0.1s;
+}
+.ql-config::before {
+    content: 'Config';
+    margin-left: 0.95rem;
+    font-size: 12px;
+}
+#darkmodetoggle::before {
+    content: 'Switch to dark mode';
+}
+.dark #darkmodetoggle::before {
+    content: 'Switch to light mode';
+}
+body.dark {
+    background-color: rgb(18, 18, 18);
+}
+.dark .ql-export::before {
+    content: 'Export';
+    font-size: 12px;
+    color: #cccccc;
+}
+
+.dark .ql-import::before {
+    content: 'Import';
+    font-size: 12px;
+    color: #cccccc;
+}
+.dark .ql-config::before {
+    content: 'Config';
+    margin-left: 0.95rem;
+    font-size: 12px;
+    color: #cccccc;
+}
+* {
+    transition: color,background 0.3s;
+}
+#fade {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    opacity: 1;
+    pointer-events: none;
+    z-index: 200;
+    transition: opacity 2s ease;
+    padding: 0;
+    margin: 0;
+}
+
+#fade.hide {
+    opacity: 0;
+}
+
+.ql-picker-options .ql-palette-label {
+    display: block;
+    width: 100%;
+    font-size: 11px;
+    line-height: 1;
+    color: #999;
+    text-align: center;
+    padding: 4px 0 3px;
+    user-select: none;
+    pointer-events: none;
+}
+
+.dark .ql-picker-options .ql-palette-label {
+    color: #999;
+}
+
+.ql-picker-options .ql-palette-color {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+#config-palette {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 0.7rem 0;
+    width: 80%;
+}
+
+#config-palette input[type="color"] {
+    width: 1.8rem;
+    height: 1.8rem;
+    padding: 0;
+    border: 1.8px solid #909090;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    background: none;
+}
+
+.dark #config-palette input[type="color"] {
+    border: 1.8px solid #636363;
+}
+
+#paleta-import-texto {
+    width: 80%;
+    height: 4rem;
+    resize: none;
+    border-radius: 0.6rem;
+    border: 1.8px solid #909090;
+    padding: 0.4rem;
+    font-size: 11px;
+    font-family: monospace;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.dark #paleta-import-texto {
+    border: 1.8px solid #636363;
+    background-color: rgb(18, 18, 18);
+    color: white;
+}
+#trocar-btn {
+    display: flex;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    bottom: 2.2rem;
+    left: 0.5rem;
+    height: 3.5rem;
+    width: 3.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: var(--color-2);
+    transition: all 0.15s;
+    z-index: 2;
+}
+
+#trocar-btn:hover {
+    transition: all 0.15s;
+    background-color: var(--color-4);
+}
+
+#trocar-btn svg {
+    fill: white;
+    height: 70%;
+}
